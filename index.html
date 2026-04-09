@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>离线语音识别及合成 SDK 下载中心</title>
+  <style>
+    /* ===== Reset & Base ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy-900: #0a1628;
+      --navy-800: #0d1f3c;
+      --navy-700: #102448;
+      --navy-600: #153060;
+      --navy-500: #1a3a72;
+      --accent:   #2563eb;
+      --accent-light: #3b82f6;
+      --accent-glow:  rgba(37, 99, 235, 0.35);
+      --gold:     #f0a500;
+      --text-primary:   #e8edf7;
+      --text-secondary: #9aaec8;
+      --text-muted:     #5a7199;
+      --border:   rgba(255,255,255,0.08);
+      --card-bg:  rgba(13, 31, 60, 0.75);
+      --radius:   12px;
+      --font: 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      background-color: var(--navy-900);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--navy-900); }
+    ::-webkit-scrollbar-thumb { background: var(--navy-500); border-radius: 3px; }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(37,99,235,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(37,99,235,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ===== Navigation ===== */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 999;
+      background: rgba(10, 22, 40, 0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 16px var(--accent-glow);
+    }
+    .logo-icon svg { width: 20px; height: 20px; fill: #fff; }
+    .logo-text { font-size: 17px; font-weight: 700; color: var(--text-primary); letter-spacing: .5px; }
+
+    nav { display: flex; align-items: center; gap: 4px; }
+    nav a {
+      text-decoration: none; color: var(--text-secondary); font-size: 14px;
+      padding: 8px 16px; border-radius: 6px;
+      transition: color .2s, background .2s; white-space: nowrap;
+    }
+    nav a:hover, nav a.active { color: var(--text-primary); background: rgba(37,99,235,.15); }
+    nav a.active { color: var(--accent-light); font-weight: 600; }
+
+    .menu-btn {
+      display: none; background: none; border: none; cursor: pointer;
+      padding: 6px; color: var(--text-secondary);
+    }
+
+    .mobile-menu {
+      display: none; flex-direction: column;
+      padding: 12px 24px 16px;
+      border-top: 1px solid var(--border);
+      background: rgba(10, 22, 40, 0.97);
+    }
+    .mobile-menu a {
+      text-decoration: none; color: var(--text-secondary); font-size: 15px;
+      padding: 12px 8px; border-bottom: 1px solid var(--border); transition: color .2s;
+    }
+    .mobile-menu a:hover { color: var(--accent-light); }
+
+    /* ===== Hero ===== */
+    .hero {
+      position: relative; z-index: 1;
+      padding: 160px 24px 100px;
+      text-align: center; overflow: hidden;
+    }
+    .hero::after {
+      content: ''; position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(37,99,235,.12) 0%, transparent 70%);
+      pointer-events: none; z-index: -1;
+    }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(37,99,235,.15); border: 1px solid rgba(37,99,235,.4);
+      border-radius: 20px; padding: 5px 14px;
+      font-size: 12px; color: var(--accent-light); letter-spacing: 1px;
+      text-transform: uppercase; margin-bottom: 28px;
+    }
+
+    .hero h1 {
+      font-size: clamp(28px, 5vw, 52px); font-weight: 800;
+      line-height: 1.2; letter-spacing: -.5px; margin-bottom: 20px;
+      background: linear-gradient(135deg, #e8edf7 30%, var(--accent-light) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      white-space: pre-line;
+    }
+    .hero p { font-size: clamp(14px, 2vw, 18px); color: var(--text-secondary); max-width: 560px; margin: 0 auto 12px; line-height: 1.7; }
+    .hero .hero-sub { font-size: clamp(16px,2.2vw,20px); color: var(--text-secondary); font-weight: 500; margin-bottom: 10px; }
+
+    .hero-stats { display: inline-flex; gap: 48px; flex-wrap: wrap; justify-content: center; margin-top: 28px; }
+    .stat { display: flex; flex-direction: column; align-items: center; }
+    .stat-num { font-size: 26px; font-weight: 800; color: var(--accent-light); }
+    .stat-label { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+    .divider { width: 80px; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); margin: 0 auto 20px; }
+
+    /* ===== Features ===== */
+    .features {
+      position: relative; z-index: 1;
+      background: rgba(13,31,60,.5);
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      padding: 40px 24px; margin-bottom: 80px;
+    }
+    .features-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; }
+    .feature-item { display: flex; align-items: flex-start; gap: 14px; }
+    .feature-icon { width: 42px; height: 42px; flex-shrink: 0; background: rgba(37,99,235,.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .feature-icon svg { width: 20px; height: 20px; }
+    .feature-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .feature-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+
+    /* ===== Download Section ===== */
+    .section { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 0 24px 80px; }
+    .section-header { text-align: center; margin-bottom: 48px; }
+    .section-header h2 { font-size: clamp(22px,3vw,32px); font-weight: 700; margin-bottom: 12px; }
+    .section-header p { color: var(--text-secondary); font-size: 15px; }
+
+    .cards-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; }
+
+    .card {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 32px 24px 28px; display: flex; flex-direction: column; align-items: center;
+      text-align: center; transition: transform .25s, border-color .25s, box-shadow .25s;
+      backdrop-filter: blur(10px); position: relative; overflow: hidden;
+    }
+    .card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0; transition: opacity .25s;
+    }
+    .card:hover { transform: translateY(-6px); border-color: rgba(37,99,235,.45); box-shadow: 0 16px 48px rgba(0,0,0,.35), 0 0 24px var(--accent-glow); }
+    .card:hover::before { opacity: 1; }
+
+    .card-icon {
+      width: 68px; height: 68px;
+      background: linear-gradient(135deg, rgba(37,99,235,.2), rgba(37,99,235,.05));
+      border: 1px solid rgba(37,99,235,.25); border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 20px; transition: box-shadow .25s;
+    }
+    .card:hover .card-icon { box-shadow: 0 0 24px var(--accent-glow); }
+    .card-icon svg { width: 32px; height: 32px; }
+
+    .card-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; color: var(--text-primary); }
+    .card-subtitle { font-size: 12px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.6; }
+
+    .card-meta { display: flex; flex-direction: column; gap: 8px; width: 100%; margin-bottom: 24px; }
+    .meta-row {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 12px; padding: 6px 10px;
+      background: rgba(255,255,255,.03); border-radius: 6px; border: 1px solid var(--border);
+    }
+    .meta-label { color: var(--text-muted); }
+    .meta-value { color: var(--text-secondary); font-weight: 500; }
+    .version-badge {
+      display: inline-block; background: rgba(37,99,235,.2); border: 1px solid rgba(37,99,235,.35);
+      color: var(--accent-light); font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 600;
+    }
+
+    .btn-download {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; padding: 12px 20px;
+      background: linear-gradient(135deg, var(--accent), #1d4ed8);
+      color: #fff; font-size: 14px; font-weight: 600; border: none; border-radius: 8px;
+      cursor: pointer; text-decoration: none; transition: all .2s; letter-spacing: .3px;
+      box-shadow: 0 4px 16px rgba(37,99,235,.4); font-family: var(--font);
+    }
+    .btn-download:hover { background: linear-gradient(135deg, var(--accent-light), var(--accent)); transform: translateY(-1px); box-shadow: 0 6px 24px rgba(37,99,235,.55); }
+    .btn-download:active { transform: translateY(0); }
+    .btn-download svg { width: 16px; height: 16px; fill: #fff; transition: transform .2s; }
+    .btn-download:hover svg { transform: translateY(1px); }
+
+    .btn-disabled {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; padding: 12px 20px;
+      background: rgba(255,255,255,.04); color: var(--text-muted); font-size: 14px; font-weight: 600;
+      border: 1px dashed rgba(255,255,255,.12); border-radius: 8px; cursor: not-allowed;
+      letter-spacing: .3px; font-family: var(--font);
+    }
+
+    /* ===== Footer ===== */
+    footer { position: relative; z-index: 1; background: rgba(10,22,40,.95); border-top: 1px solid var(--border); padding: 40px 24px 30px; text-align: center; }
+    .footer-inner { max-width: 1200px; margin: 0 auto; }
+    .footer-links { display: flex; justify-content: center; gap: 32px; flex-wrap: wrap; margin-bottom: 24px; }
+    .footer-links a { color: var(--text-muted); text-decoration: none; font-size: 13px; transition: color .2s; }
+    .footer-links a:hover { color: var(--accent-light); }
+    .footer-divider { width: 100%; height: 1px; background: var(--border); margin-bottom: 24px; }
+    .footer-copy { font-size: 13px; color: var(--text-muted); line-height: 1.8; }
+    .footer-copy a { color: var(--text-muted); text-decoration: none; transition: color .2s; }
+    .footer-copy a:hover { color: var(--accent-light); }
+
+    /* ===== Toast ===== */
+    .toast {
+      position: fixed; bottom: 32px; left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--navy-600); border: 1px solid rgba(37,99,235,.4);
+      color: var(--text-primary); font-size: 14px; padding: 12px 24px;
+      border-radius: 8px; box-shadow: 0 8px 32px rgba(0,0,0,.4);
+      z-index: 9999; opacity: 0; transition: all .35s cubic-bezier(.4,0,.2,1); white-space: nowrap;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* Admin entry */
+    .admin-entry {
+      position: fixed; bottom: 24px; right: 24px; z-index: 999;
+      background: rgba(13,31,60,.9); border: 1px solid var(--border);
+      border-radius: 8px; padding: 8px 14px; font-size: 12px; color: var(--text-muted);
+      text-decoration: none; backdrop-filter: blur(8px); transition: all .2s;
+    }
+    .admin-entry:hover { color: var(--accent-light); border-color: rgba(37,99,235,.4); }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 1024px) { .cards-grid { grid-template-columns: repeat(2,1fr); } .features-inner { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 640px) {
+      nav { display: none; } .menu-btn { display: flex; } .mobile-menu.open { display: flex; }
+      .cards-grid { grid-template-columns: 1fr; } .features-inner { grid-template-columns: 1fr; }
+      .hero { padding: 120px 24px 80px; } .hero-stats { gap: 28px; } .footer-links { gap: 16px; }
+    }
+
+    @keyframes fadeUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+    .card { animation: fadeUp .5s ease both; }
+    .card:nth-child(1) { animation-delay: .05s; }
+    .card:nth-child(2) { animation-delay: .12s; }
+    .card:nth-child(3) { animation-delay: .19s; }
+    .card:nth-child(4) { animation-delay: .26s; }
+  </style>
+</head>
+<body>
+
+  <header id="header">
+    <div class="nav-inner">
+      <a href="#" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23" stroke="#fff" stroke-width="2"/><line x1="8" y1="23" x2="16" y2="23" stroke="#fff" stroke-width="2"/></svg>
+        </div>
+        <span class="logo-text" id="logoText">VoiceSDK</span>
+      </a>
+
+      <nav id="desktop-nav"></nav>
+
+      <button class="menu-btn" id="menuBtn">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu"></div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero" id="home">
+    <div class="hero-badge">
+      <svg viewBox="0 0 24 24" style="width:12px;height:12px;fill:var(--accent-light)"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+      官方资源包 · 稳定可信赖
+    </div>
+    <h1 id="heroTitle">离线语音识别及合成<br>资源包下载</h1>
+    <p class="hero-sub" id="heroSubtitle">全平台支持，一键接入</p>
+    <p id="heroDesc">无需联网，保护数据隐私，快速部署到您的业务场景</p>
+    <div class="hero-stats" id="heroStats"></div>
+  </section>
+
+  <!-- Features -->
+  <div class="features">
+    <div class="features-inner">
+      <div class="feature-item">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-light)" stroke-width="1.8"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></div>
+        <div><div class="feature-title">高精度识别</div><div class="feature-desc">业界领先的声学模型，普通话准确率高达 99.2%</div></div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-light)" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+        <div><div class="feature-title">全平台覆盖</div><div class="feature-desc">支持 Windows、麒麟、统信、安卓等主流系统</div></div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-light)" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div><div class="feature-title">数据安全</div><div class="feature-desc">完全离线运行，语音数据不出本地，合规保障</div></div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-light)" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div><div class="feature-title">极速响应</div><div class="feature-desc">首字时延 &lt;50ms，流式输出，实时反馈</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Download -->
+  <section class="section" id="download">
+    <div class="section-header">
+      <div class="divider"></div>
+      <h2 id="dlTitle">选择您的平台，立即下载</h2>
+      <p id="dlSubtitle">请根据您的运行环境选择对应的 SDK 资源包</p>
+    </div>
+    <div class="cards-grid" id="cardsGrid"></div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="about">
+    <div class="footer-inner">
+      <div class="footer-links" id="footerLinks"></div>
+      <div class="footer-divider"></div>
+      <div class="footer-copy" id="footerCopy"></div>
+    </div>
+  </footer>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Admin entry -->
+  <a href="admin/login.html" class="admin-entry" title="进入后台管理">⚙ 后台管理</a>
+
+  <script>
+    // ===== Data =====
+    const DEFAULT_SDKS = [
+      {id:'win',name:'Windows',arch:'x86 / x86_64',version:'v2.3.1',date:'2026-04-01',size:'--',url:'',desc:'支持 Win 10 / Win 11，x86_64 架构',status:'active',downloads:0},
+      {id:'kyl',name:'麒麟 · ARM',arch:'ARM',version:'v2.3.0',date:'2026-03-28',size:'--',url:'',desc:'国产麒麟操作系统，ARM 架构处理器',status:'active',downloads:0},
+      {id:'uos',name:'统信 · X86',arch:'x86_64',version:'v2.3.0',date:'2026-03-25',size:'--',url:'',desc:'统信 UOS 操作系统，x86_64 架构处理器',status:'active',downloads:0},
+      {id:'and',name:'安卓 · Android',arch:'ARM64',version:'v2.2.5',date:'2026-03-20',size:'--',url:'',desc:'Android 7.0 及以上，ARM/ARM64 架构',status:'active',downloads:0},
+    ];
+    const DEFAULT_CONTENT = {
+      logoText:'VoiceSDK',
+      navItems:'首页|下载中心|技术支持|关于我们',
+      heroTitle:'离线语音识别及合成\n资源包下载',
+      heroSubtitle:'全平台支持，一键接入',
+      heroDesc:'无需联网，保护数据隐私，快速部署到您的业务场景',
+      stat1num:'4+', stat1label:'支持平台',
+      stat2num:'99.2%', stat2label:'识别准确率',
+      stat3num:'<50ms', stat3label:'首字响应',
+      stat4num:'离线', stat4label:'无需联网',
+      dlTitle:'选择您的平台，立即下载',
+      dlSubtitle:'请根据您的运行环境选择对应的 SDK 资源包',
+      copyright:'© 2026 VoiceSDK 离线语音技术团队 · All Rights Reserved',
+      email:'support@voicesdk.example.com',
+    };
+
+    function getData(key, def) {
+      try { return JSON.parse(localStorage.getItem(key)) || def; } catch(e) { return def; }
+    }
+    function setData(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
+
+    function getSdks() { return getData('sdk_platforms', DEFAULT_SDKS); }
+    function getContent() { return {...DEFAULT_CONTENT, ...getData('sdk_content', {})}; }
+
+    // ===== Platform Icons =====
+    const ICONS = {
+      win: `<svg viewBox="0 0 24 24" fill="none"><path d="M3 5.5L10.5 4.5V11.5H3V5.5Z" fill="var(--accent-light)" opacity=".9"/><path d="M11.5 4.35L21 3V11.5H11.5V4.35Z" fill="var(--accent-light)"/><path d="M3 12.5H10.5V19.5L3 18.5V12.5Z" fill="var(--accent-light)" opacity=".9"/><path d="M11.5 12.5H21V21L11.5 19.65V12.5Z" fill="var(--accent-light)"/></svg>`,
+      kyl: `<svg viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5z" stroke="var(--accent-light)" stroke-width="1.8" stroke-linejoin="round" fill="rgba(59,130,246,.2)"/><path d="M2 17l10 5 10-5" stroke="var(--accent-light)" stroke-width="1.8" stroke-linejoin="round"/><path d="M2 12l10 5 10-5" stroke="var(--accent-light)" stroke-width="1.8" stroke-linejoin="round"/></svg>`,
+      uos: `<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="var(--accent-light)" stroke-width="1.8" fill="rgba(59,130,246,.15)"/><path d="M12 3C12 3 8 7 8 12s4 9 4 9" stroke="var(--accent-light)" stroke-width="1.5"/><path d="M12 3C12 3 16 7 16 12s-4 9-4 9" stroke="var(--accent-light)" stroke-width="1.5"/><line x1="3" y1="12" x2="21" y2="12" stroke="var(--accent-light)" stroke-width="1.5"/><line x1="5" y1="7.5" x2="19" y2="7.5" stroke="var(--accent-light)" stroke-width="1.2" opacity=".6"/><line x1="5" y1="16.5" x2="19" y2="16.5" stroke="var(--accent-light)" stroke-width="1.2" opacity=".6"/></svg>`,
+      and: `<svg viewBox="0 0 24 24"><path d="M6.18 15.64a2.18 2.18 0 0 1-2.18 2.18C2.98 17.82 2 16.84 2 15.64V11.5a2.18 2.18 0 1 1 4.36 0l-.18 4.14z" fill="var(--accent-light)" opacity=".7"/><path d="M17.82 15.64a2.18 2.18 0 0 0 2.18 2.18c1.02 0 2-.98 2-2.18V11.5a2.18 2.18 0 1 0-4.36 0l.18 4.14z" fill="var(--accent-light)" opacity=".7"/><path d="M17 11.5H7a5 5 0 0 1 10 0v7a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2v-7z" fill="var(--accent-light)" opacity=".85"/><path d="M9 21.5v1.5M15 21.5v1.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/><line x1="8.5" y1="3.5" x2="5.5" y2="1" stroke="var(--accent-light)" stroke-width="1.5" stroke-linecap="round"/><line x1="15.5" y1="3.5" x2="18.5" y2="1" stroke="var(--accent-light)" stroke-width="1.5" stroke-linecap="round"/><circle cx="9.5" cy="13" r="1" fill="#fff"/><circle cx="14.5" cy="13" r="1" fill="#fff"/></svg>`,
+    };
+
+    function getIcon(sdk, index) {
+      const keys = Object.keys(ICONS);
+      return ICONS[sdk.id] || ICONS[keys[index % keys.length]];
+    }
+
+    // ===== Render Content =====
+    function renderPage() {
+      const c = getContent();
+      const sdks = getSdks().filter(s => s.status !== 'disabled');
+
+      // Logo
+      document.getElementById('logoText').textContent = c.logoText;
+      document.title = (c.heroTitle.replace(/\n/g,'') || 'SDK') + ' 下载中心';
+
+      // Nav
+      const navLinks = (c.navItems || '').split('|').filter(Boolean);
+      const anchors = ['#home','#download','#support','#about'];
+      const navHtml = navLinks.map((t,i) =>
+        `<a href="${anchors[i]||'#'}">${t}</a>`
+      ).join('');
+      document.getElementById('desktop-nav').innerHTML = navHtml;
+      document.getElementById('mobileMenu').innerHTML = navLinks.map((t,i) =>
+        `<a href="${anchors[i]||'#'}">${t}</a>`
+      ).join('');
+
+      // Hero
+      document.getElementById('heroTitle').textContent = c.heroTitle;
+      document.getElementById('heroSubtitle').textContent = c.heroSubtitle;
+      document.getElementById('heroDesc').textContent = c.heroDesc;
+
+      const stats = [
+        {num: c.stat1num, label: c.stat1label},
+        {num: c.stat2num, label: c.stat2label},
+        {num: c.stat3num, label: c.stat3label},
+        {num: c.stat4num, label: c.stat4label},
+      ];
+      document.getElementById('heroStats').innerHTML = stats.map(s =>
+        `<div class="stat"><span class="stat-num">${s.num}</span><span class="stat-label">${s.label}</span></div>`
+      ).join('');
+
+      // Download section
+      document.getElementById('dlTitle').textContent = c.dlTitle;
+      document.getElementById('dlSubtitle').textContent = c.dlSubtitle;
+
+      // Cards
+      const grid = document.getElementById('cardsGrid');
+      if (!sdks.length) {
+        grid.innerHTML = '<p style="color:var(--text-muted);text-align:center;grid-column:1/-1;padding:48px;">暂无可用的 SDK 资源包</p>';
+      } else {
+        grid.innerHTML = sdks.map((s, i) => `
+          <div class="card">
+            <div class="card-icon">${getIcon(s, i)}</div>
+            <div class="card-title">${s.name}</div>
+            <div class="card-subtitle">${(s.desc||'').replace(/，/g,'<br>')}</div>
+            <div class="card-meta">
+              <div class="meta-row"><span class="meta-label">版本</span><span class="version-badge">${s.version}</span></div>
+              <div class="meta-row"><span class="meta-label">更新时间</span><span class="meta-value">${s.date||'--'}</span></div>
+              <div class="meta-row"><span class="meta-label">包大小</span><span class="meta-value">${s.size||'--'}</span></div>
+            </div>
+            ${s.url
+              ? `<a href="${s.url}" class="btn-download" onclick="recordDownload(event,'${s.name}','${s.version}','${s.id}','${s.url}')">
+                  <svg viewBox="0 0 24 24"><path d="M12 16l-5-5 1.41-1.42L11 13.17V4h2v9.17l2.59-2.59L17 11l-5 5zm-7 3h14v2H5z"/></svg>
+                  立即下载
+                </a>`
+              : `<button class="btn-disabled" onclick="showToast('下载链接暂未配置，请稍后再试')">
+                  <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14h-2v-2h2zm0-4h-2V7h2z"/></svg>
+                  暂未开放
+                </button>`
+            }
+          </div>
+        `).join('');
+      }
+
+      // Footer
+      const footerNavHtml = navLinks.map((t,i) =>
+        `<a href="${anchors[i]||'#'}">${t}</a>`
+      ).join('') + '<a href="#">隐私政策</a><a href="#">服务协议</a>';
+      document.getElementById('footerLinks').innerHTML = footerNavHtml;
+      document.getElementById('footerCopy').innerHTML =
+        `${c.copyright}<br>如有技术问题，请联系 <a href="mailto:${c.email}">${c.email}</a>`;
+    }
+
+    // ===== Record Download =====
+    function recordDownload(e, platform, version, sdkId, url) {
+      if (!url || url === '#') { e.preventDefault(); showToast('下载链接暂未配置'); return; }
+      // Update download count
+      const sdks = getSdks();
+      const idx = sdks.findIndex(s => s.id === sdkId);
+      if (idx >= 0) { sdks[idx].downloads = (sdks[idx].downloads || 0) + 1; setData('sdk_platforms', sdks); }
+      // Log
+      const logs = getData('sdk_dl_logs', []);
+      logs.push({ platform, version, time: new Date().toISOString().slice(0, 19).replace('T',' '), ua: navigator.platform || 'Browser' });
+      setData('sdk_dl_logs', logs);
+    }
+
+    // ===== Toast =====
+    let _toastTimer;
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg; t.classList.add('show');
+      clearTimeout(_toastTimer);
+      _toastTimer = setTimeout(() => t.classList.remove('show'), 3200);
+    }
+
+    // ===== Header Scroll =====
+    window.addEventListener('scroll', () => {
+      document.getElementById('header').style.boxShadow = window.scrollY > 10 ? '0 4px 32px rgba(0,0,0,.4)' : 'none';
+    });
+
+    // ===== Mobile Menu =====
+    document.getElementById('menuBtn').addEventListener('click', () => {
+      document.getElementById('mobileMenu').classList.toggle('open');
+    });
+    document.getElementById('mobileMenu').addEventListener('click', e => {
+      if (e.target.tagName === 'A') document.getElementById('mobileMenu').classList.remove('open');
+    });
+
+    // ===== Init =====
+    renderPage();
+
+    // Re-render when storage changes (if admin updates in another tab)
+    window.addEventListener('storage', () => renderPage());
+  </script>
+</body>
+</html>
