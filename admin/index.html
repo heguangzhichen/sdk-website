@@ -353,10 +353,6 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             新增 / 更新平台
           </button>
-          <button class="btn btn-ghost" onclick="autoGenAllUrls()" style="border-color:var(--accent);color:var(--accent-light);" title="根据系统设置中的 GitHub 配置，为所有平台生成下载链接">
-            <svg style="width:14px;height:14px;vertical-align:middle;margin-right:4px;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-            一键生成下载链接
-          </button>
         </div>
         <div class="table-wrap">
           <table>
@@ -507,36 +503,6 @@
       <!-- ===== Settings ===== -->
       <div class="page" id="page-settings">
         <div class="form-card" style="max-width:600px;">
-
-          <!-- GitHub 配置 -->
-          <div class="form-section">
-            <div class="form-section-title">
-              <svg style="width:14px;height:14px;vertical-align:middle;margin-right:4px;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-              GitHub Releases 配置
-            </div>
-            <div style="font-size:12px;color:var(--text-muted);margin-bottom:16px;padding:10px 12px;background:rgba(37,99,235,.08);border-radius:8px;border:1px solid rgba(37,99,235,.2);">
-              填写 GitHub 信息后，可自动生成下载链接。<a href="https://github.com/YOUR_USERNAME/YOUR_REPO/releases" target="_blank" style="color:var(--accent-light);">查看 Releases →</a>
-            </div>
-            <div class="form-group" style="margin-bottom:14px;">
-              <label class="form-label">GitHub 用户名</label>
-              <input class="form-input" id="s_gh_user" placeholder="例如：mycompany"/>
-              <span class="form-hint">你的 GitHub 账号用户名</span>
-            </div>
-            <div class="form-group" style="margin-bottom:14px;">
-              <label class="form-label">仓库名称</label>
-              <input class="form-input" id="s_gh_repo" placeholder="例如：sdk-website"/>
-              <span class="form-hint">存放 SDK 文件的 GitHub 仓库名</span>
-            </div>
-            <div class="form-group">
-              <label class="form-label">当前版本标签</label>
-              <input class="form-input" id="s_gh_tag" placeholder="例如：v2.3.1"/>
-              <span class="form-hint">与 GitHub Releases 的 Tag 版本号保持一致</span>
-            </div>
-          </div>
-
-          <div style="height:1px;background:var(--border);margin:8px 0 20px;"></div>
-
-          <!-- 管理员账号 -->
           <div class="form-section">
             <div class="form-section-title">管理员账号</div>
             <div class="form-group" style="margin-bottom:14px;">
@@ -603,11 +569,8 @@
         </div>
         <div class="form-group form-grid-1">
           <label class="form-label">下载链接 <span>*</span></label>
-          <div style="display:flex;gap:8px;align-items:flex-start;">
-            <input class="form-input" id="m_url" placeholder="https://github.com/.../releases/download/v2.3.1/..." style="flex:1;"/>
-            <button type="button" class="btn btn-ghost" style="white-space:nowrap;padding:0 12px;height:38px;border-color:var(--accent);color:var(--accent-light);" onclick="autoGenUrl()">自动生成</button>
-          </div>
-          <span class="form-hint">填写 GitHub 配置后，点击「自动生成」快速生成链接，或手动填入任意直链</span>
+          <input class="form-input" id="m_url" placeholder="https://example.com/sdk/xxx.zip"/>
+          <span class="form-hint">直接填写下载地址，用户点击后将跳转到此链接下载</span>
         </div>
         <div class="form-group form-grid-1">
           <label class="form-label">平台简介</label>
@@ -990,9 +953,6 @@ function loadSettings(){
   document.getElementById('s_user').value=cfg.adminUser||'admin';
   document.getElementById('s_pass').value='';
   document.getElementById('s_pass2').value='';
-  document.getElementById('s_gh_user').value=cfg.ghUser||'';
-  document.getElementById('s_gh_repo').value=cfg.ghRepo||'';
-  document.getElementById('s_gh_tag').value=cfg.ghTag||'';
 }
 
 function saveSettings(){
@@ -1004,36 +964,10 @@ function saveSettings(){
   const cfg=getCfg();
   cfg.adminUser=user;
   if(p1) cfg.adminPass=p1;
-  cfg.ghUser=document.getElementById('s_gh_user').value.trim();
-  cfg.ghRepo=document.getElementById('s_gh_repo').value.trim();
-  cfg.ghTag=document.getElementById('s_gh_tag').value.trim();
   setData(KEYS.cfg,cfg);
   showToast('设置已保存','success');
 }
 
-// ==================== GitHub URL 生成 ====================
-function getGhBase(){
-  const cfg=getCfg();
-  if(!cfg.ghUser||!cfg.ghRepo||!cfg.ghTag) return null;
-  return `https://github.com/${cfg.ghUser}/${cfg.ghRepo}/releases/download/${cfg.ghTag}`;
-}
-
-function genGhUrl(filename){
-  const base=getGhBase();
-  if(!base) return '';
-  return `${base}/${filename}`;
-}
-
-// 一键从 GitHub 配置生成所有下载链接
-function autoGenAllUrls(){
-  const base=getGhBase();
-  if(!base){ showToast('请先在「系统设置」中填写 GitHub 配置','error'); return; }
-  const sdks=getSdks();
-  sdks.forEach(s=>{
-    const fn=`VoiceSDK_${s.name.replace(/\s+/g,'_')}_${s.version||'latest'}.zip`;
-    s.url=genGhUrl(fn);
-  });
-  setData(KEYS.sdks,sdks);
   renderSdkTable();
   showToast('已根据 GitHub 配置生成所有下载链接','success');
 }

@@ -465,7 +465,7 @@
               <div class="meta-row"><span class="meta-label">包大小</span><span class="meta-value">${s.size||'--'}</span></div>
             </div>
             ${s.url
-              ? `<a href="${s.url}" class="btn-download" onclick="recordDownload(event,'${s.name}','${s.version}','${s.id}','${s.url}')">
+              ? `<a href="${s.url}" class="btn-download" target="_blank">
                   <svg viewBox="0 0 24 24"><path d="M12 16l-5-5 1.41-1.42L11 13.17V4h2v9.17l2.59-2.59L17 11l-5 5zm-7 3h14v2H5z"/></svg>
                   立即下载
                 </a>`
@@ -485,19 +485,6 @@
       document.getElementById('footerLinks').innerHTML = footerNavHtml;
       document.getElementById('footerCopy').innerHTML =
         `${c.copyright}<br>如有技术问题，请联系 <a href="mailto:${c.email}">${c.email}</a>`;
-    }
-
-    // ===== Record Download =====
-    function recordDownload(e, platform, version, sdkId, url) {
-      if (!url || url === '#') { e.preventDefault(); showToast('下载链接暂未配置'); return; }
-      // Update download count
-      const sdks = getSdks();
-      const idx = sdks.findIndex(s => s.id === sdkId);
-      if (idx >= 0) { sdks[idx].downloads = (sdks[idx].downloads || 0) + 1; setData('sdk_platforms', sdks); }
-      // Log
-      const logs = getData('sdk_dl_logs', []);
-      logs.push({ platform, version, time: new Date().toISOString().slice(0, 19).replace('T',' '), ua: navigator.platform || 'Browser' });
-      setData('sdk_dl_logs', logs);
     }
 
     // ===== Toast =====
