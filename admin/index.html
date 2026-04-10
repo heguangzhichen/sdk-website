@@ -969,19 +969,7 @@ function saveSettings(){
 }
 
   renderSdkTable();
-  showToast('已根据 GitHub 配置生成所有下载链接','success');
-}
-
-// 单个自动生成
-function autoGenUrl(){
-  const base=getGhBase();
-  const name=document.getElementById('m_name').value.trim();
-  const version=document.getElementById('m_version').value.trim();
-  if(!base){ showToast('请先在「系统设置」中填写 GitHub 配置','error'); return; }
-  if(!name){ showToast('请先填写平台名称','error'); return; }
-  const fn=`VoiceSDK_${name.replace(/\s+/g,'_')}_${version||'latest'}.zip`;
-  document.getElementById('m_url').value=genGhUrl(fn);
-  showToast(`已生成：${fn}`,'success');
+  showToast('下载链接已更新','success');
 }
 
 // ==================== Init ====================
